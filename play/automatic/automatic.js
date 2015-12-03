@@ -1069,7 +1069,7 @@ function step(){
 	var j = Math.floor(Math.random()*empties.length);
 		var placed = false;
 		var e;
-		var end = j+10;
+		var end = j+20;
 		while(j < end && placed == false){
 			var neighbors = 0;
 		    var same = 0;
