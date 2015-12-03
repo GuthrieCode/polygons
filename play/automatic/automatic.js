@@ -1063,11 +1063,14 @@ function step(){
 		//}
 	}
 	else{
-	
+	// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	// NEVER ENDING SHARKS
+	//greedy algorithm that solves most sandboxes in reasonable time
 	var j = Math.floor(Math.random()*empties.length);
 		var placed = false;
 		var e;
-		while(j < empties.length + j && placed == false){
+		var end = j+10;
+		while(j < end && placed == false){
 			var neighbors = 0;
 		    var same = 0;
 			if (j >= empties.length){
@@ -1092,9 +1095,7 @@ function step(){
 				
 		        if(nx*nx+ny*ny<DIAGONAL_SQUARED){
 		            neighbors++;
-		            //<!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		            // Never Ending Sharks
-		            // Pairwise relationship amongs the polygons
+
 		            if (n.color == shaker.color) {
 		                same++;
 		            }	
@@ -1106,7 +1107,6 @@ function step(){
 		    } else {
 		        sameness = 1;
 		    }
-			//numMoves.innerHTML = sameness;
 			if (shaker.color == "square") {
 		                if (sameness<BIAS_square ||sameness>NONCONFORM_square) {							
 		                   placed = false; 
