@@ -1063,40 +1063,93 @@ function step(){
 		//}
 	}
 	else{
-		// Find the furthest empty spot and move there
-		// First find and store the distances between each empty spot and the current shaker
-		var distances = [];
-		for(var i = 0; i < empties.length; i ++){
-			var distanceX = Math.abs(empties[i].x - shaker.x);
-			var distanceY = Math.abs(empties[i].y - shaker.y);
-			var totalDistance = distanceX + distanceY;
-			distances.push(totalDistance);
-		}
-		// Find the index of the largest value of totalDistance
-		// This requires the following helper function:
-		function indexOfLargest(a) {
-			var largest = 0;
-			for (var i = 1; i < a.length; i++) {
-				if (a[i] > a[largest]) largest = i;
+	
+	var j = Math.floor(Math.random()*empties.length);
+		var placed = false;
+		var e;
+		while(j < empties.length + j && placed == false){
+			var neighbors = 0;
+		    var same = 0;
+			if (j >= empties.length){
+				e = empties[empties.length-j]
 			}
-			return largest;
+			else{
+		    e = empties[j];
+			}
+			j++;
+				var i = 0;
+				placed = true;
+		      while(i < draggables.length){
+				  
+				var n = draggables[i];
+				i++;
+		        if(n==e){
+					continue;
+				} 
+				
+		        var nx = n.x-e.x;
+		        var ny = n.y-e.y;
+				
+		        if(nx*nx+ny*ny<DIAGONAL_SQUARED){
+		            neighbors++;
+		            //<!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		            // Never Ending Sharks
+		            // Pairwise relationship amongs the polygons
+		            if (n.color == shaker.color) {
+		                same++;
+		            }	
+				}	
+			  }				
+			 var sameness = 0.0;
+		    if (neighbors > 0) {
+		        sameness = (same / neighbors);
+		    } else {
+		        sameness = 1;
+		    }
+			//numMoves.innerHTML = sameness;
+			if (shaker.color == "square") {
+		                if (sameness<BIAS_square ||sameness>NONCONFORM_square) {							
+		                   placed = false; 
+				    }		                		            
+		        }      
+		            if (shaker.color == "triangle") {
+		                if (sameness < BIAS_triangle || sameness > NONCONFORM_triangle) {
+		                    placed = false; 
+		                }
+		            }		
+		            if (shaker.color == "circle") {
+		                if (sameness < BIAS_circle || sameness > NONCONFORM_circle) {
+		                    placed = false; 
+		                }
+		            }
+				
+			  
+			  
+		    if(placed == true){
+				if(!e) return;
+				shaker.gotoX = e.x;
+				shaker.gotoY = e.y;
+			}
+			  
+			
 		}
-		var largestDistance = indexOfLargest(distances);
-		// The last polygon tends to get hung up
-		// If there's only one left, return to random sorting
-		if(shaking.length < 3) RANDOM_MOVE = true;
-		else{
-			var closestSpot = empties[largestDistance];
-			if(!closestSpot) return;
-			shaker.gotoX = closestSpot.x;
-			shaker.gotoY = closestSpot.y;
+		
+			if(!placed){
+				var spot = empties[Math.floor(Math.random()*empties.length)];
+			if(!spot) return;
+			shaker.gotoX = spot.x;
+			shaker.gotoY = spot.y;
+			
+			
+			}
+	
 			// increment numMoves
 			numMoves.innerHTML++;
 			// track successful moves
 			//if(shaking.pop() && shaking.length < numShakers){
 			//	goodMoves.innerHTML++;
 			//}
-		}
+		
 	}
 
 	// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
